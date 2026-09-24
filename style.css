@@ -1,0 +1,304 @@
+/* Fuente china incluida en el proyecto (no depende de Google Fonts) */
+@font-face {
+  font-family: "Noto Serif SC Local";
+  src: url("fonts/noto-serif-sc.woff") format("woff");
+  font-display: swap;
+}
+
+:root {
+  /* Paleta de cerezo */
+  --bg-top: #1c0f38;
+  --bg-mid: #0b0618;
+  --petal-light: #fff4f8;
+  --petal: #ffc2d6;
+  --petal-deep: #ff79a6;
+  --stem: #d9689a;
+  --glow: #ff8fbb;
+  --paper: #fffaf6;
+  --ink: #5b2638;
+  --cycle: 10s;
+
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+html { height: 100%; scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  font-family: "Noto Serif SC Local", "Songti SC", "SimSun", serif;
+}
+
+/* ---------- Escenario (todo en cqi) ---------- */
+.stage {
+  container-type: inline-size;
+  position: relative;
+  width: min(100vw, 150vh);
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: linear-gradient(to bottom, var(--bg-top) 0%, var(--bg-mid) 40%, #000 68%);
+}
+.haze {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(to top, #000 0 24%, rgba(0,0,0,.85) 34%, transparent 58%);
+}
+
+/* ---------- Flor ---------- */
+.flower { position: absolute; left: var(--x); bottom: var(--b); width: 0; z-index: 3; }
+.flower.back { z-index: 1; filter: brightness(.8); }
+
+.stem {
+  position: absolute;
+  bottom: 0;
+  left: calc(-0.4cqi * var(--s));
+  width: calc(0.8cqi * var(--s));
+  height: var(--h);
+  border-radius: 1cqi;
+  background: linear-gradient(to top, #3d1024, var(--stem) 60%, #ffb8d0);
+  box-shadow: 0 0 1cqi var(--glow);
+  animation: grow var(--cycle) var(--d) infinite ease-out;
+}
+@keyframes grow {
+  0%        { height: 0; opacity: 1; }
+  30%       { height: var(--h); }
+  72%       { opacity: 1; }
+  80%, 100% { height: var(--h); opacity: 0; }
+}
+
+/* Hojas: el contenedor las recorta a la altura actual del tallo */
+.leaves {
+  position: absolute; bottom: 0; left: 50%;
+  width: calc(20cqi * var(--s)); height: 100%;
+  transform: translateX(-50%);
+  overflow: hidden;
+}
+.leaves .anchor { position: absolute; left: 50%; bottom: 0; width: 0; height: var(--h); }
+.leaf {
+  position: absolute;
+  bottom: calc(var(--h) * var(--y));
+  width: calc(6cqi * var(--s));
+  height: calc(1.8cqi * var(--s));
+  border-radius: 100% 0;
+  opacity: .85;
+  transform: rotate(var(--rot)) scale(1);
+  animation: leaf var(--cycle) calc(var(--d) + var(--ld)) infinite ease-out;
+}
+.leaf.r {
+  left: 50%; transform-origin: left center; --rot: -28deg;
+  background: linear-gradient(to right, #4e1430, #d8588a 60%, transparent);
+}
+.leaf.l {
+  right: 50%; transform-origin: right center; --rot: 28deg;
+  border-radius: 0 100%;
+  background: linear-gradient(to left, #4e1430, #d8588a 60%, transparent);
+}
+@keyframes leaf {
+  0%        { transform: rotate(var(--rot)) scale(0); opacity: .85; }
+  8%        { transform: rotate(var(--rot)) scale(1); }
+  72%       { opacity: .85; }
+  80%, 100% { transform: rotate(var(--rot)) scale(1); opacity: 0; }
+}
+
+/* Cabeza de la flor */
+.head {
+  position: absolute; top: 0; left: 50%; width: 0; height: 0;
+  filter: drop-shadow(0 0 1cqi var(--glow)) drop-shadow(0 0 3cqi rgba(255, 120, 170, .5));
+  animation: bloom var(--cycle) var(--d) infinite;
+}
+@keyframes bloom {
+  0%, 28% { transform: scale(0) rotate(-90deg); }
+  40%     { transform: scale(1.12) rotate(8deg); }
+  46%, 100% { transform: scale(1) rotate(0deg); }
+}
+
+/* Pétalo de cerezo: redondo, con la muesca típica en la punta */
+.petal {
+  position: absolute; left: 0; top: 0;
+  width: calc(6.8cqi * var(--s));
+  height: calc(6.8cqi * var(--s));
+  border-radius: 0 100% 100% 100%;
+  transform-origin: 0 0;
+  transform: rotate(calc(var(--r) - 45deg));
+  background: linear-gradient(135deg, var(--petal-deep) 0%, var(--petal) 40%, var(--petal-light) 90%);
+  -webkit-mask-image: radial-gradient(circle at 100% 100%, transparent 0 16%, #000 17%);
+          mask-image: radial-gradient(circle at 100% 100%, transparent 0 16%, #000 17%);
+  opacity: .95;
+}
+.core {
+  position: absolute;
+  width: calc(2.2cqi * var(--s)); height: calc(2.2cqi * var(--s));
+  left: calc(-1.1cqi * var(--s)); top: calc(-1.1cqi * var(--s));
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0%, #ffe3ec 45%, #ff9cc0 100%);
+  box-shadow: 0 0 calc(2cqi * var(--s)) calc(.5cqi * var(--s)) #ffc3d8;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse { 50% { box-shadow: 0 0 calc(3.5cqi * var(--s)) calc(1cqi * var(--s)) #ffd3e2; } }
+
+/* Pasto */
+.blade {
+  position: absolute; bottom: 0;
+  width: calc(var(--bw) * var(--s)); height: calc(var(--bh) * var(--s));
+  opacity: .7; transform-origin: bottom;
+  -webkit-mask-image: linear-gradient(to top, #000 30%, transparent);
+          mask-image: linear-gradient(to top, #000 30%, transparent);
+  animation: sprout var(--cycle) var(--d) infinite ease-out;
+}
+.blade.r { border-left:  calc(.35cqi * var(--s)) solid var(--stem); border-radius: 100% 0 0 0; }
+.blade.l { border-right: calc(.35cqi * var(--s)) solid var(--stem); border-radius: 0 100% 0 0; }
+@keyframes sprout {
+  0%        { transform: scaleY(0); opacity: .7; }
+  20%       { transform: scaleY(1); }
+  72%       { opacity: .7; }
+  80%, 100% { transform: scaleY(1); opacity: 0; }
+}
+
+/* Chispas que suben */
+.spark {
+  position: absolute; z-index: 4;
+  left: var(--x); bottom: var(--b);
+  width: .45cqi; height: .45cqi; border-radius: 50%;
+  background: #ffd6e5; box-shadow: 0 0 1cqi #ff8fbb;
+  opacity: 0;
+  animation: rise var(--t) var(--d) infinite linear;
+}
+@keyframes rise {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  20%  { opacity: .9; }
+  100% { transform: translate(var(--dx), -22cqi); opacity: 0; }
+}
+
+/* Pétalos que caen */
+.fall {
+  position: absolute; z-index: 5; top: -3%;
+  left: var(--x);
+  width: var(--sz); height: calc(var(--sz) * .8);
+  border-radius: 80% 0 80% 0;
+  background: linear-gradient(135deg, var(--petal-light), var(--petal) 60%, var(--petal-deep));
+  box-shadow: 0 0 .8cqi rgba(255, 150, 190, .6);
+  opacity: 0;
+  animation: fall var(--t) var(--d) infinite linear;
+}
+@keyframes fall {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  10%  { opacity: .9; }
+  50%  { transform: translate(var(--dx), 35cqi) rotate(270deg); }
+  90%  { opacity: .8; }
+  100% { transform: translate(calc(var(--dx) * -0.5), 70cqi) rotate(540deg); opacity: 0; }
+}
+
+/* ---------- Sobre ---------- */
+.envelope {
+  position: fixed;
+  left: 0; right: 0;
+  bottom: calc(5vh + env(safe-area-inset-bottom, 0px));
+  margin: 0 auto;
+  width: 112px; height: 74px;
+  padding: 0; border: 0; border-radius: 6px;
+  background: #f3a6bf;
+  cursor: pointer;
+  perspective: 400px;
+  z-index: 10;
+  box-shadow: 0 0 28px rgba(255, 140, 185, .45);
+  opacity: 0;
+  animation: envIn 1s 4s forwards, float 3s 5s ease-in-out infinite;
+}
+.envelope:focus-visible { outline: 3px solid #fff; outline-offset: 6px; }
+.envelope .pocket {
+  position: absolute; inset: 0; border-radius: 6px;
+  background: #f7bccd;
+  clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%);
+  z-index: 2;
+}
+.envelope .flap {
+  position: absolute; left: 0; top: 0;
+  width: 100%; height: 62%;
+  background: #e98aab;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transform-origin: top;
+  transition: transform .6s ease, z-index 0s .3s;
+  z-index: 3;
+}
+.envelope .seal {
+  position: absolute; left: 50%; top: 42%;
+  width: 24px; height: 24px; margin-left: -12px;
+  border-radius: 50%;
+  background: #c2185b; color: #ffe3ec;
+  font-size: 13px; line-height: 24px;
+  z-index: 4;
+  transition: opacity .3s;
+}
+.envelope .hint {
+  position: absolute; top: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 16px; letter-spacing: .15em; color: #ffd3e2;
+}
+.envelope.open { animation: none; opacity: 1; }
+.envelope.open .flap { transform: rotateX(180deg); z-index: 1; }
+.envelope.open .seal { opacity: 0; }
+
+@keyframes envIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+@keyframes float { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(-6px); opacity: 1; } }
+
+/* ---------- Carta ---------- */
+.letter-wrap {
+  position: fixed; inset: 0; z-index: 20;
+  display: grid; place-items: center;
+  padding: 16px;
+  background: rgba(12, 4, 20, .6);
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  opacity: 0; pointer-events: none;
+  transition: opacity .5s;
+}
+.letter-wrap.show { opacity: 1; pointer-events: auto; }
+.letter {
+  position: relative;
+  width: min(100%, 440px);
+  max-height: 82vh; overflow-y: auto;
+  box-sizing: border-box;
+  padding: 36px 30px 28px;
+  background:
+    radial-gradient(circle at 100% 0, rgba(255, 194, 214, .55) 0 70px, transparent 71px),
+    var(--paper);
+  color: var(--ink);
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .5), 0 0 40px rgba(255, 140, 185, .25);
+  transform: translateY(40px) scale(.96);
+  transition: transform .6s cubic-bezier(.2, .8, .2, 1);
+}
+.letter-wrap.show .letter { transform: none; }
+.letter .to, .letter .sign {
+  font-weight: 700; margin: 0;
+}
+.letter .to { font-size: 26px; margin-bottom: 18px; }
+.letter .sign { font-size: 20px; line-height: 1.6; text-align: right; margin-top: 22px; white-space: pre-line; }
+.letter .body p { font-size: 17px; line-height: 1.9; margin: 0 0 14px; text-indent: 2em; }
+
+/* Los párrafos aparecen uno por uno */
+.letter .to, .letter .body p, .letter .sign {
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .7s, transform .7s;
+  transition-delay: var(--delay, 0s);
+}
+.letter-wrap.show .to, .letter-wrap.show .body p, .letter-wrap.show .sign { opacity: 1; transform: none; }
+
+.letter .close {
+  display: block; margin: 24px auto 0;
+  padding: 10px 22px;
+  border: 1.5px solid var(--petal-deep); border-radius: 999px;
+  background: transparent; color: var(--ink);
+  font: inherit; font-size: 15px; cursor: pointer;
+}
+.letter .close:hover { background: #ffe3ec; }
+.letter .close:focus-visible { outline: 3px solid var(--petal-deep); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .stem, .leaf, .head, .blade, .core, .spark, .fall, .envelope { animation: none; }
+  .envelope { opacity: 1; }
+  .fall, .spark { display: none; }
+}

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>樱花园</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Escenario de las flores -->
+  <main class="stage" id="stage" aria-label="樱花动画">
+    <div class="haze"></div>
+  </main>
+
+  <!-- Sobre -->
+  <button class="envelope" id="envelope" aria-label="打开信">
+    <span class="flap"></span>
+    <span class="pocket"></span>
+    <span class="seal">♥</span>
+    <span class="hint">你有一封信</span>
+  </button>
+
+  <!-- Carta -->
+  <div class="letter-wrap" id="letterWrap" aria-hidden="true">
+    <article class="letter" role="dialog" aria-modal="true" aria-labelledby="letterTo">
+      <h2 class="to" id="letterTo"></h2>
+      <div class="body" id="letterBody"></div>
+      <p class="sign" id="letterSign"></p>
+      <button class="close" id="closeLetter">合上信</button>
+    </article>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
